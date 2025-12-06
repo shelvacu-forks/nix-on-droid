@@ -34,9 +34,12 @@ stdenv.mkDerivation {
       '#define HAS_LOADER_32BIT true' \
       ""
     ! (grep -F '#define HAS_LOADER_32BIT' src/arch.h)
+    # don't wanna get a 128GB loader (LLVM 17->21 regression?)
+    substituteInPlace src/GNUmakefile --replace ",-Ttext" ",-n,-Ttext"
   '';
   buildInputs = [ talloc ];
   patches = [ ./detranslate-empty.patch ];
+  hardeningDisable = [ "zerocallusedregs" ];
   makeFlags = [ "-Csrc" "V=1" ];
   CFLAGS = [ "-O3" "-I../fake-ashmem" ] ++
     (if static then [ "-static" ] else [ ]);
