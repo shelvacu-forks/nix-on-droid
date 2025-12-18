@@ -107,7 +107,7 @@
               inherit extraSpecialArgs home-manager-path pkgs;
               config.imports = modules;
               isFlake = true;
-              prootTermux = self.packages.${pkgs.stdenv.hostPlatform.system}."prootTermux-${arch}";
+              prootTermux = self.packages.${pkgs.stdenv.hostPlatform.system}."prootTermux-${pkgs.stdenv.hostPlatform.parsed.cpu.name}";
             });
 
       overlays.default = overlay;
