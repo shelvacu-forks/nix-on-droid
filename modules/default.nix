@@ -6,7 +6,7 @@
 , pkgs ? import <nixpkgs> { }
 , home-manager-path ? <home-manager>
 , isFlake ? false
-, prootStatic
+, prootTermux
 }:
 
 with pkgs.lib;
@@ -26,7 +26,7 @@ let
   rawModule = evalModules {
     modules = [
       configModule
-      { config.environment.files = { inherit prootStatic; }; }
+      { config.environment.files = { inherit prootTermux; }; }
     ] ++ nodModules;
     specialArgs = extraSpecialArgs;
     class = "nixOnDroid";

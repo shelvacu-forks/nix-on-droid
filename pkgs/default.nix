@@ -52,7 +52,7 @@ let
       };
     };
 
-    prootStatic = customPkgs.prootTermux;
+    prootTermux = customPkgs.prootTermux;
   };
 
   callPackage = pkgs.lib.callPackageWith (
