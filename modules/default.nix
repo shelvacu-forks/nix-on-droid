@@ -26,7 +26,7 @@ let
   rawModule = evalModules {
     modules = [
       configModule
-      { config.environment.files = { inherit prootTermux; }; }
+      { config.environment.files.prootStatic = prootTermux; }
     ] ++ nodModules;
     specialArgs = extraSpecialArgs;
     class = "nixOnDroid";
