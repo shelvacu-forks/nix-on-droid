@@ -13,9 +13,11 @@
 let
   buildRootDirectory = "root-directory";
 
+  static-nix = pkgsStatic.nix; #.overrideAttrs { version = "omitted"; };
+
   prootCommand = lib.concatStringsSep " " [
     "${proot}/bin/proot"
-    "-b ${pkgsStatic.nix}:/static-nix"
+    "-b ${static-nix}:/static-nix"
     "-b /proc:/proc" # needed because tries to access /proc/self/exe
     "-r ${buildRootDirectory}"
     "-w /"
@@ -24,6 +26,7 @@ let
   prootTermuxClosure = closureInfo {
     rootPaths = [
       prootTermux
+      static-nix
     ];
   };
 in

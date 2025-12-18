@@ -51,6 +51,8 @@ let
         flake.nix-on-droid = urlOptionValue nixOnDroidFlakeURL "NIX_ON_DROID_FLAKE_URL";
       };
     };
+
+    prootStatic = customPkgs.prootTermux;
   };
 
   callPackage = pkgs.lib.callPackageWith (
@@ -72,4 +74,5 @@ in
 {
   inherit (modules) config;
   inherit customPkgs;
+  inherit nixDirectory;
 }

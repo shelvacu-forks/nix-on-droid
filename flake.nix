@@ -5,9 +5,9 @@
     nixpkgs.url = "github:NixOS/nixpkgs";
 
     # for bootstrap zip ball creation and proot-termux builds, we use a fixed version of nixpkgs to ease maintanence.
-    # head of nixos-25.11 as of 2025-12-06
+    # pr#471845
     # note: when updating nixpkgs-for-bootstrap, update store paths of proot-termux in modules/environment/login/default.nix
-    nixpkgs-for-bootstrap.url = "github:NixOS/nixpkgs/c97c47f2bac4fa59e2cbdeba289686ae615f8ed4";
+    nixpkgs-for-bootstrap.url = "github:NixOS/nixpkgs/71dc2e7df310d90a3c738e423fdfc13b710a8d67";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -79,6 +79,9 @@
         , extraModules ? null
         , system ? null  # pkgs.stdenv.hostPlatform.system is used to detect user's arch
         }:
+        let
+          arch = pkgs.stdenv.hostPlatform.linuxArch;
+        in
         if ! (builtins.elem pkgs.stdenv.hostPlatform.system [ "aarch64-linux" "x86_64-linux" ]) then
           throw
             ("${pkgs.stdenv.hostPlatform.system} is not supported; aarch64-linux / x86_64-linux " +
@@ -104,6 +107,7 @@
               inherit extraSpecialArgs home-manager-path pkgs;
               config.imports = modules;
               isFlake = true;
+              prootStatic = self.packages.${pkgs.stdenv.hostPlatform.system}."prootStatic-${arch}";
             });
 
       overlays.default = overlay;
@@ -135,6 +139,21 @@
         // (perArchCustomPkgs "aarch64")
         // (perArchCustomPkgs "x86_64")
         // docs
+      );
+
+      legacyPackages = forEachSystem (system:
+        let
+          perArchCustomPkgs = arch:
+            (import ./pkgs {
+              _nativeSystem = system; # system to cross-compile from
+              system = "${arch}-linux"; # system to cross-compile to
+              nixpkgs = nixpkgs-for-bootstrap;
+            });
+        in
+        {
+          to-aarch64 = perArchCustomPkgs "aarch64";
+          to-x86_64 = perArchCustomPkgs "x86_64";
+        }
       );
 
       templates = {

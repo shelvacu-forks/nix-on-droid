@@ -6,6 +6,7 @@
 , pkgs ? import <nixpkgs> { }
 , home-manager-path ? <home-manager>
 , isFlake ? false
+, prootStatic
 }:
 
 with pkgs.lib;
@@ -23,7 +24,10 @@ let
   };
 
   rawModule = evalModules {
-    modules = [ configModule ] ++ nodModules;
+    modules = [
+      configModule
+      { config.environment.files = { inherit prootStatic; }; }
+    ] ++ nodModules;
     specialArgs = extraSpecialArgs;
     class = "nixOnDroid";
   };
