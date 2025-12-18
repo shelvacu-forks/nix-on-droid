@@ -145,10 +145,10 @@ in
           ${cfg.extraOptions}
         '';
 
-        "nix/registry.json".text = builtins.toJSON {
-          version = 2;
-          flakes = mapAttrsToList (_n: v: { inherit (v) from to exact; }) cfg.registry;
-        };
+        # "nix/registry.json".text = builtins.toJSON {
+        #   version = 2;
+        #   flakes = mapAttrsToList (_n: v: { inherit (v) from to exact; }) cfg.registry;
+        # };
       };
 
       nix = {
