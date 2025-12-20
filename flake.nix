@@ -79,9 +79,6 @@
         , extraModules ? null
         , system ? null  # pkgs.stdenv.hostPlatform.system is used to detect user's arch
         }:
-        let
-          arch = pkgs.stdenv.hostPlatform.linuxArch;
-        in
         if ! (builtins.elem pkgs.stdenv.hostPlatform.system [ "aarch64-linux" "x86_64-linux" ]) then
           throw
             ("${pkgs.stdenv.hostPlatform.system} is not supported; aarch64-linux / x86_64-linux " +
