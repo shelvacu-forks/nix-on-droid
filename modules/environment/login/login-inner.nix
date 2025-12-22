@@ -33,6 +33,11 @@ writeText "login-inner" ''
       # To prevent gc warnings of nix, see https://github.com/NixOS/nix/issues/3237
       export GC_NPROCS=1
 
+      if [ -e /nix/var/registration ]; then
+        ${nix}/bin/nix-store --load-db < /nix/var/registration
+        rm /nix/var/registration
+      fi
+
       echo "Setting default user profile..."
       ${nix}/bin/nix-env --switch-profile /nix/var/nix/profiles/per-user/$USER/profile
 

@@ -5,7 +5,7 @@
 let
   arch = lib.strings.removeSuffix "-linux" targetSystem;
 in
-runCommand "bootstrap-zip" { } ''
+runCommand "bootstrap-zip" { passthru.contents = bootstrap; } ''
   mkdir $out
   cd ${bootstrap}
   ${zip}/bin/zip -q -9 -r $out/bootstrap-${arch} ./* ./.l2s

@@ -2,12 +2,15 @@
 
 { config
 , lib
-, stdenvNoCC
+, runCommand
 , closureInfo
 , prootTermux
 , proot
 , pkgsStatic
 , system
+, nix
+, cacert
+, bashNonInteractive
 }:
 
 let
@@ -23,65 +26,40 @@ let
     "-w /"
   ];
 
-  prootTermuxClosure = closureInfo {
+  info = closureInfo {
     rootPaths = [
       prootTermux
       static-nix
+      nix
+      cacert
+      bashNonInteractive
     ];
   };
+  # prootTermuxClosure = closureInfo {
+  #   rootPaths = [
+  #     prootTermux
+  #     static-nix
+  #   ];
+  # };
 in
+runCommand "nix-directory" { } ''
+  # create nix state directory to satisfy nix heuristics to recognize the manual created /nix directory as a valid nix store
+  mkdir -p build/nix/var/nix/db
+  mkdir -p build/nix/store
 
-stdenvNoCC.mkDerivation {
-  name = "nix-directory";
+  for i in $(< ${info}/store-paths); do
+    cp --archive "$i" "build$i"
+  done
 
-  src = builtins.fetchurl {
-    url = "https://nixos.org/releases/nix/nix-2.31.2/nix-2.31.2-${system}.tar.xz";
-    sha256 =
-      let
-        nixShas = {
-          aarch64-linux = "sha256:0mh4aqzx4dzf1m80al2ffx5p2axcwn2qzxzq9f5p2v892a255nv4";
-          x86_64-linux = "sha256:0q4azlxwqvzrad4bgbwggvm7lc4waawvy25sci4225nhxs37rxni";
-        };
-      in
-      nixShas.${system};
-  };
-
-  PROOT_NO_SECCOMP = 1; # see https://github.com/proot-me/PRoot/issues/106
-
-  buildPhase = ''
-    # create nix state directory to satisfy nix heuristics to recognize the manual create /nix directory as valid nix store
-    mkdir --parents ${buildRootDirectory}/nix/var/nix/db
-    cp --recursive store ${buildRootDirectory}/nix/store
-
-    CACERT=$(find ${buildRootDirectory}/nix/store -path '*-nss-cacert-*/ca-bundle.crt' | sed 's,^${buildRootDirectory},,')
-    PKG_BASH=$(find ${buildRootDirectory}/nix/store -path '*/bin/bash' | sed 's,^${buildRootDirectory},,')
-    PKG_BASH=''${PKG_BASH%/bin/bash}
-    PKG_NIX=$(find ${buildRootDirectory}/nix/store -path '*/bin/nix' | sed 's,^${buildRootDirectory},,')
-    PKG_NIX=''${PKG_NIX%/bin/nix}
-
-    for i in $(< ${prootTermuxClosure}/store-paths); do
-      cp --archive "$i" "${buildRootDirectory}$i"
-    done
-
-    USER=${config.user.userName} ${prootCommand} "/static-nix/bin/nix-store" --init
-    USER=${config.user.userName} ${prootCommand} "/static-nix/bin/nix-store" --load-db < .reginfo
-    USER=${config.user.userName} ${prootCommand} "/static-nix/bin/nix-store" --load-db < ${prootTermuxClosure}/registration
-
-    cat > package-info.nix <<EOF
-    {
-      bash = "$PKG_BASH";
-      cacert = "$CACERT";
-      nix = "$PKG_NIX";
-    }
-    EOF
-  '';
-
-  installPhase = ''
-    mkdir $out
-    cp --recursive ${buildRootDirectory}/nix/store $out/store
-    cp --recursive ${buildRootDirectory}/nix/var $out/var
-    install -D -m 0644 package-info.nix $out/nix-support/package-info.nix
-  '';
-
-  fixupPhase = "true";
-}
+  mkdir -p $out/nix-support
+  cp --recursive build/nix/store $out/store
+  cp --recursive build/nix/var $out/var
+  cp ${info}/registration $out/var/registration
+  cat > $out/nix-support/package-info.nix <<EOF
+  {
+    bash = "${bashNonInteractive}";
+    cacert = "${cacert}";
+    nix = "${nix}";
+  }
+  EOF
+''
