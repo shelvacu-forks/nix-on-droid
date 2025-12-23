@@ -77,17 +77,17 @@
     },
     "nixpkgs-for-bootstrap": {
       "locked": {
-        "lastModified": 1766336832,
-        "narHash": "sha256-jtRiwCQnisZgbvmcNaEV9hotLc9B7kQTwJpHkk2MzYA=",
-        "owner": "NixOS",
+        "lastModified": 1766454158,
+        "narHash": "sha256-9ZiIOLDS82rJnCd708bPEBAtXjiH43ie1znWdcIBQS8=",
+        "owner": "shelvacu-forks",
         "repo": "nixpkgs",
-        "rev": "b595be3cdb2883b3ca7523947bd865cda9056455",
+        "rev": "5064d9b4dc42e7320d0530f67abf7d6a9b5c9c92",
         "type": "github"
       },
       "original": {
-        "owner": "NixOS",
+        "owner": "shelvacu-forks",
+        "ref": "nixos-25.11-small-nix-on-droid",
         "repo": "nixpkgs",
-        "rev": "b595be3cdb2883b3ca7523947bd865cda9056455",
         "type": "github"
       }
     },

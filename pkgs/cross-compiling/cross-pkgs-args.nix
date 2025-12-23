@@ -8,8 +8,6 @@ in
 {
   inherit (stdenv.hostPlatform) system;
 
-  overlays = [ (import ./libunwind-overlay.nix) ];
-
   crossSystem = {
     config = "${arch}-unknown-linux-android";
     androidSdkVersion = "35";
