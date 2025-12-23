@@ -2,5 +2,4 @@
 
 [
   (import ./typespeed.nix)
-  (import ./libunwind.nix)
 ]

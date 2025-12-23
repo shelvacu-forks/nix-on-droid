@@ -4,15 +4,6 @@
 
 let
   args = callPackage ./cross-pkgs-args.nix { };
-  pkgsCross-imported = import nixpkgs args;
-  pkgsCross-patched = pkgsCross-imported.applyPatches {
-    name = "nixpkgs-crosscompilation-patched";
-    src = nixpkgs;
-    patches = [
-      ./compiler-rt.patch
-      ./libunwind.patch
-    ];
-  };
-  pkgsCross = import pkgsCross-patched args;
+  pkgsCross = import nixpkgs args;
 in
 pkgsCross
