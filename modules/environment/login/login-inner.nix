@@ -1,9 +1,9 @@
 # Copyright (c) 2019-2024, see AUTHORS. Licensed under MIT License, see LICENSE.
 
-{ config, lib, initialPackageInfo, writeText, targetSystem }:
+{ config, lib, pkgs, writeText, targetSystem }:
 
 let
-  inherit (initialPackageInfo) cacert nix;
+  inherit (pkgs) nix cacert;
 
   nixCmd = "${nix}/bin/nix --extra-experimental-features 'flakes nix-command'";
   userShell =

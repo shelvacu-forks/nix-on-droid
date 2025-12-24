@@ -1,6 +1,6 @@
 # Copyright (c) 2019-2025, see AUTHORS. Licensed under MIT License, see LICENSE.
 
-{ config, lib, pkgs, initialPackageInfo, targetSystem, ... }:
+{ config, lib, pkgs, targetSystem, ... }:
 
 with lib;
 
@@ -10,7 +10,7 @@ let
   login = pkgs.callPackage ./login.nix { inherit config; };
 
   loginInner = pkgs.callPackage ./login-inner.nix {
-    inherit config initialPackageInfo targetSystem;
+    inherit config targetSystem;
   };
 in
 

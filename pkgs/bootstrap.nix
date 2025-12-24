@@ -1,6 +1,6 @@
 # Copyright (c) 2019-2024, see AUTHORS. Licensed under MIT License, see LICENSE.
 
-{ runCommand, nixDirectory, prootTermux, bash, pkgs, config, initialPackageInfo }:
+{ runCommand, nixDirectory, prootTermux, bash, config }:
 
 runCommand "bootstrap" { } ''
   mkdir --parents $out/{.l2s,bin,dev/shm,etc,root,tmp,usr/{bin,lib}}
@@ -10,7 +10,7 @@ runCommand "bootstrap" { } ''
   cp --recursive ${nixDirectory}/var $out/nix/var
   chmod --recursive u+w $out/nix
 
-  ln --symbolic ${initialPackageInfo.bash}/bin/sh $out/bin/sh
+  ln --symbolic ${nixDirectory.bash}/bin/sh $out/bin/sh
 
   install -D -m 0755 ${prootTermux}/bin/proot-static $out/bin/proot-static
 

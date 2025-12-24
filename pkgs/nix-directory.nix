@@ -24,7 +24,9 @@ let
     ];
   };
 in
-runCommand "nix-directory" { } ''
+runCommand "nix-directory" {
+  passthru.bash = bashNonInteractive;
+} ''
   # create nix state directory to satisfy nix heuristics to recognize the manual created /nix directory as a valid nix store
   mkdir -p build/nix/var/nix/db
   mkdir -p build/nix/store
@@ -37,11 +39,4 @@ runCommand "nix-directory" { } ''
   cp --recursive build/nix/store $out/store
   cp --recursive build/nix/var $out/var
   cp ${info}/registration $out/var/registration
-  cat > $out/nix-support/package-info.nix <<EOF
-  {
-    bash = "${bashNonInteractive}";
-    cacert = "${cacert}";
-    nix = "${nix}";
-  }
-  EOF
 ''
