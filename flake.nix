@@ -2,7 +2,7 @@
   description = "Nix-enabled environment for your Android device";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11-small";
 
     # for bootstrap zip ball creation and proot-termux builds, we use a fixed version of nixpkgs to ease maintanence.
     nixpkgs-for-bootstrap.url = "github:shelvacu-forks/nixpkgs/nixos-25.11-small-nix-on-droid";
@@ -148,6 +148,21 @@
         {
           to-aarch64 = perArchCustomPkgs "aarch64";
           to-x86_64 = perArchCustomPkgs "x86_64";
+        }
+      );
+
+      devShells = forEachSystem (system:
+        let
+          pkgs = import nixpkgs {
+            inherit system;
+            config = {
+              allowUnfree = true;
+              android_sdk.accept_license = true;
+            };
+          };
+        in
+        {
+          default = import ./shell-with-emulator.nix { inherit pkgs; };
         }
       );
 
