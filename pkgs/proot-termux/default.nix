@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , talloc
 , static ? true
+, strip ? true
 , outputBinaryName ? "proot-static"
 }:
 
@@ -42,8 +43,10 @@ stdenv.mkDerivation {
   hardeningDisable = [ "zerocallusedregs" ];
   makeFlags = [ "-Csrc" "V=1" ];
   CFLAGS = [ "-O3" "-I../fake-ashmem" ] ++
-    (if static then [ "-static" ] else [ ]);
-  LDFLAGS = if static then [ "-static" ] else [ ];
-  preInstall = "${stdenv.cc.targetPrefix}strip src/proot";
+    (if static then [ "-static" ] else [ ]) ++
+    (if strip then [ ] else [ "-g3" ])
+    ;
+  LDFLAGS = (if static then [ "-static" ] else [ ]) ++ (if strip then [ ] else [ "-g3" ]);
+  preInstall = if strip then "${stdenv.cc.targetPrefix}strip src/proot" else "";
   installPhase = "install -D -m 0755 src/proot $out/bin/${outputBinaryName}";
 }

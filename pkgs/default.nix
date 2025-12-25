@@ -65,6 +65,7 @@ let
     bootstrap = callPackage ./bootstrap.nix { };
     bootstrapZip = callPackage ./bootstrap-zip.nix { };
     prootTermux = callPackage ./cross-compiling/proot-termux.nix { };
+    prootTermuxDebug = callPackage ./cross-compiling/proot-termux.nix { strip = false; };
     tallocStatic = callPackage ./cross-compiling/talloc-static.nix { };
   };
 in

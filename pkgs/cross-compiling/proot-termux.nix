@@ -1,6 +1,6 @@
 # Copyright (c) 2019-2022, see AUTHORS. Licensed under MIT License, see LICENSE.
 
-{ callPackage, tallocStatic }:
+{ callPackage, tallocStatic, strip ? true }:
 
 let
   pkgsCross = callPackage ./cross-pkgs.nix { };
@@ -9,5 +9,5 @@ in
 
 pkgsCross.callPackage ../proot-termux {
   talloc = tallocStatic;
-  inherit stdenv;
+  inherit stdenv strip;
 }
