@@ -3,8 +3,8 @@
 { stdenv
 , fetchFromGitHub
 , talloc
+, nonAndroidGcc
 , static ? true
-, strip ? true
 , outputBinaryName ? "proot-static"
 }:
 
@@ -35,18 +35,16 @@ stdenv.mkDerivation {
       '#define HAS_LOADER_32BIT true' \
       ""
     ! (grep -F '#define HAS_LOADER_32BIT' src/arch.h)
-    # don't wanna get a 128GB loader (LLVM 17->21 regression?)
-    substituteInPlace src/GNUmakefile --replace ",-Ttext" ",-n,-Ttext"
   '';
   buildInputs = [ talloc ];
   patches = [ ./detranslate-empty.patch ];
   hardeningDisable = [ "zerocallusedregs" ];
   makeFlags = [ "-Csrc" "V=1" ];
   CFLAGS = [ "-O3" "-I../fake-ashmem" ] ++
-    (if static then [ "-static" ] else [ ]) ++
-    (if strip then [ ] else [ "-g3" ])
+    (if static then [ "-static" ] else [ ])
     ;
-  LDFLAGS = (if static then [ "-static" ] else [ ]) ++ (if strip then [ ] else [ "-g3" ]);
-  preInstall = if strip then "${stdenv.cc.targetPrefix}strip src/proot" else "";
+  LDFLAGS = (if static then [ "-static" ] else [ ]);
+  LOADER_LDFLAGS = [ "-fuse-ld=${nonAndroidGcc}/bin/ld.gold" ];
+  preInstall = "${stdenv.cc.targetPrefix}strip src/proot";
   installPhase = "install -D -m 0755 src/proot $out/bin/${outputBinaryName}";
 }
