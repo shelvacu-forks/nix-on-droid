@@ -5,6 +5,7 @@ svl_no_args $#
 
 svl_assert_probably_in_script_dir
 
+adb shell pm clear com.termux.nix
 rm -rf n-o-d
 mkdir n-o-d
 git -C . archive --format=tar.gz --prefix n-o-d/ HEAD > n-o-d/archive.tar.gz
@@ -15,4 +16,4 @@ adb push n-o-d /data/local/tmp/
 echo 'pushed'
 adb shell 'cd /data/local/tmp/n-o-d && tar xzof archive.tar.gz && mv n-o-d unpacked'
 echo 'unpacked'
-
+adb shell 'am start $(cmd package resolve-activity --brief com.termux.nix | tail -n 1)'

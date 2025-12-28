@@ -3,7 +3,8 @@
 { config, lib, pkgs, writeText, targetSystem }:
 
 let
-  inherit (pkgs) nix cacert;
+  inherit (pkgs) nix;
+  cacert = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
 
   nixCmd = "${nix}/bin/nix --extra-experimental-features 'flakes nix-command'";
   userShell =

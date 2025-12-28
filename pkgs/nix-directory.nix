@@ -39,4 +39,12 @@ runCommand "nix-directory" {
   cp --recursive build/nix/store $out/store
   cp --recursive build/nix/var $out/var
   cp ${info}/registration $out/var/registration
+
+  # cat > $out/nix-support/package-info.nix <<EOF
+  # {
+  #   bash = "${bashNonInteractive}";
+  #   cacert = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  #   nix = "${nix}";
+  # }
+  # EOF
 ''

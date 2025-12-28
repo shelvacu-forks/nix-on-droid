@@ -57,11 +57,8 @@ log "NIX_ON_DROID_FLAKE_URL=$NIX_ON_DROID_FLAKE_URL"
 
 UPLOADS=()
 for arch in $ARCHES; do
-    log "building $arch proot..."
-    proot="$(nix build --no-link --print-out-paths ".#prootTermux-${arch}")"
-
     log "building $arch bootstrapZip..."
-    BOOTSTRAP_ZIP="$(nix build --no-link --print-out-paths --impure ".#bootstrapZip-${arch}")"
+    BOOTSTRAP_ZIP="$(nix build --no-link --print-out-paths --impure ".#.packages.${arch}-linux.bootstrapZip-${arch}")"
     UPLOADS+=($BOOTSTRAP_ZIP/bootstrap-$arch.zip)
 done
 
