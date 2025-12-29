@@ -61,6 +61,8 @@ let
     }
   );
 
+  pkgsCross = callPackage ./cross-compiling/cross-pkgs.nix { };
+
   customPkgs = {
     bootstrap = callPackage ./bootstrap.nix { };
     bootstrapZip = callPackage ./bootstrap-zip.nix { };
@@ -72,6 +74,5 @@ in
 
 {
   inherit (modules) config;
-  inherit customPkgs;
-  inherit nixDirectory;
+  inherit customPkgs nixDirectory pkgsCross;
 }

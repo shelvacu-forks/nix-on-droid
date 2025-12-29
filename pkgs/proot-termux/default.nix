@@ -47,4 +47,6 @@ stdenv.mkDerivation {
   LOADER_LDFLAGS = [ "-fuse-ld=${nonAndroidGcc}/bin/ld.gold" ];
   preInstall = "${stdenv.cc.targetPrefix}strip src/proot";
   installPhase = "install -D -m 0755 src/proot $out/bin/${outputBinaryName}";
+
+  meta.mainProgram = outputBinaryName;
 }
