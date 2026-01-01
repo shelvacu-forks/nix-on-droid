@@ -2,10 +2,10 @@
   description = "Nix-enabled environment for your Android device";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11-small";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable-small";
 
     # for bootstrap zip ball creation and proot-termux builds, we use a fixed version of nixpkgs to ease maintanence.
-    nixpkgs-for-bootstrap.url = "github:shelvacu-forks/nixpkgs/nixos-25.11-small-nix-on-droid";
+    nixpkgs-for-bootstrap.url = "github:shelvacu-forks/nixpkgs/staging-nix-on-droid";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -45,6 +45,13 @@
           statix.enable = true;
         };
       });
+
+      nodPkgs = { system, arch, }:
+        (import ./pkgs {
+          _nativeSystem = system; # system to cross-compile from
+          system = "${arch}-linux"; # system to cross-compile to
+          nixpkgs = nixpkgs-for-bootstrap;
+        });
     in
     {
       apps = forEachSystem (system: {
@@ -115,12 +122,8 @@
                 nixpkgs.lib.attrsets.nameValuePair (name + "-" + arch) drv
               )
               derivationAttrset;
-          perArchCustomPkgs = arch: flattenArch arch
-            (import ./pkgs {
-              _nativeSystem = system; # system to cross-compile from
-              system = "${arch}-linux"; # system to cross-compile to
-              nixpkgs = nixpkgs-for-bootstrap;
-            }).customPkgs;
+
+          perArchCustomPkgs = arch: (nodPkgs { inherit system arch; }).customPkgs;
 
           docs = import ./docs {
             inherit home-manager;
@@ -137,17 +140,11 @@
       );
 
       legacyPackages = forEachSystem (system:
-        let
-          perArchCustomPkgs = arch:
-            (import ./pkgs {
-              _nativeSystem = system; # system to cross-compile from
-              system = "${arch}-linux"; # system to cross-compile to
-              nixpkgs = nixpkgs-for-bootstrap;
-            });
-        in
-        {
-          to-aarch64 = perArchCustomPkgs "aarch64";
-          to-x86_64 = perArchCustomPkgs "x86_64";
+        rec {
+          to-aarch64 = nodPkgs { inherit system; arch = "aarch64"; };
+          to-arm = to-aarch64;
+          to-x86_64 = nodPkgs { inherit system; arch = "x86_64"; };
+          to-x86 = to-x86_64;
         }
       );
 

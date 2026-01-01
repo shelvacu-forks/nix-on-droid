@@ -17,4 +17,6 @@ in
     useLLVM = true;
     isStatic = true;
   };
+
+  overlays = [ (new: old: { libuv = old.libuv.overrideAttrs { doCheck = false; }; }) ];
 }

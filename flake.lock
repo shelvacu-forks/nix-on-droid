@@ -46,16 +46,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1766458398,
-        "narHash": "sha256-nxFGATsvmLo8uA+XO+Qcl5YPZNCWGXO1FVYkISpdXog=",
+        "lastModified": 1767116409,
+        "narHash": "sha256-5vKw92l1GyTnjoLzEagJy5V5mDFck72LiQWZSOnSicw=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "a419fc5edd917eed5d0cf87518e14e6f7279318a",
+        "rev": "cad22e7d996aea55ecab064e84834289143e44a0",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
-        "ref": "nixos-25.11-small",
+        "ref": "nixos-unstable-small",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -78,16 +78,16 @@
     },
     "nixpkgs-for-bootstrap": {
       "locked": {
-        "lastModified": 1766454158,
-        "narHash": "sha256-9ZiIOLDS82rJnCd708bPEBAtXjiH43ie1znWdcIBQS8=",
+        "lastModified": 1767068708,
+        "narHash": "sha256-BTKHjKsAIiTcDm4XFGnUSdiDGUgZAeY8PeVjpH3Nbjc=",
         "owner": "shelvacu-forks",
         "repo": "nixpkgs",
-        "rev": "5064d9b4dc42e7320d0530f67abf7d6a9b5c9c92",
+        "rev": "c6f4d43683bf2e0d59e37e8866c1f374388cce75",
         "type": "github"
       },
       "original": {
         "owner": "shelvacu-forks",
-        "ref": "nixos-25.11-small-nix-on-droid",
+        "ref": "staging-nix-on-droid",
         "repo": "nixpkgs",
         "type": "github"
       }

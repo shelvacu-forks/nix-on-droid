@@ -12,7 +12,10 @@ let
   nativeSystem = if _nativeSystem == null then system else _nativeSystem;
   nixDirectory = callPackage ./nix-directory.nix { };
 
-  pkgs = import nixpkgs { system = nativeSystem; };
+  pkgs = import nixpkgs {
+    system = nativeSystem;
+    overlays = [ (new: old: { libuv = old.libuv.overrideAttrs { doCheck = false; }; }) ];
+  };
 
   urlOptionValue = url: envVar:
     let
