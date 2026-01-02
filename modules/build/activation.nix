@@ -109,8 +109,21 @@ in
       activationPackage = mkOption {
         type = types.package;
         readOnly = true;
-        internal = true;
         description = "Derivation with activation script.";
+      };
+
+      activationPackageBuilderCommands = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Additional commands to run when creating the activationPackage";
+      };
+
+      activationPackageBuilderArgs = mkOption {
+        type = types.attrsOf types.unspecified;
+        default = { };
+        description = ''
+          `lib.mkDerivation` attributes that will be passed to the top level system builder.
+        '';
       };
 
       etc = mkOption {
@@ -150,10 +163,10 @@ in
       activationPackage =
         pkgs.runCommand
           "nix-on-droid-generation"
-          {
+          ({
             preferLocalBuild = true;
             allowSubstitutes = false;
-          }
+          } // config.build.activationPackageBuilderArgs)
           ''
             mkdir --parents $out/filesystem/{bin,usr/{bin,lib}}
 
@@ -168,6 +181,8 @@ in
 
             ln --symbolic ${config.environment.binSh} $out/filesystem/bin/sh
             ln --symbolic ${config.environment.usrBinEnv} $out/filesystem/usr/bin/env
+
+            ${config.build.activationPackageBuilderCommands}
           '';
     };
 
