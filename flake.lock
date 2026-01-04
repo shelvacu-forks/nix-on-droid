@@ -129,6 +129,23 @@
         "type": "gitlab"
       }
     },
+    "proot-termux": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1767518887,
+        "narHash": "sha256-Xgj+vZzHtYNM6EDCTP6Z5rlRFKWVDcmhk8V9WkQ6iMY=",
+        "owner": "shelvacu-forks",
+        "repo": "proot",
+        "rev": "712ab6dce79000c7d36665b7bbc643e0aac4d10c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shelvacu-forks",
+        "ref": "with-notes",
+        "repo": "proot",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
@@ -136,7 +153,8 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-docs": "nixpkgs-docs",
         "nixpkgs-for-bootstrap": "nixpkgs-for-bootstrap",
-        "nmd": "nmd"
+        "nmd": "nmd",
+        "proot-termux": "proot-termux"
       }
     },
     "scss-reset": {
