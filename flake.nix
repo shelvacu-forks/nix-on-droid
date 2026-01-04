@@ -26,7 +26,7 @@
     };
 
     proot-termux = {
-      url = "github:termux/proot";
+      url = "github:shelvacu-forks/proot";
       flake = false;
     };
   };
