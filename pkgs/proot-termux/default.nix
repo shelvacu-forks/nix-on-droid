@@ -19,6 +19,11 @@ stdenv.mkDerivation {
     sha256 = "sha256-ViV8i7W47dEgYDKPN1w4tY+XaVHcXLWxTGTX3wKdARk=";
   };
 
+  patches = [
+    ./detranslate-empty.patch
+    ./trust-the-sigsys.patch
+  ];
+
   # ashmem.h is rather small, our needs are even smaller, so just define these:
   preConfigure = ''
     mkdir -p fake-ashmem/linux; cat > fake-ashmem/linux/ashmem.h << EOF
@@ -37,7 +42,6 @@ stdenv.mkDerivation {
     ! (grep -F '#define HAS_LOADER_32BIT' src/arch.h)
   '';
   buildInputs = [ talloc ];
-  patches = [ ./detranslate-empty.patch ];
   hardeningDisable = [ "zerocallusedregs" ];
   makeFlags = [ "-Csrc" "V=1" ];
   CFLAGS = [ "-O3" "-I../fake-ashmem" ] ++

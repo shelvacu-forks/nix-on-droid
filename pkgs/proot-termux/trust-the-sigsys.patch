@@ -1,0 +1,21 @@
+diff --git i/src/tracee/seccomp.c w/src/tracee/seccomp.c
+index 77d5b27..5a9c985 100644
+--- i/src/tracee/seccomp.c
++++ w/src/tracee/seccomp.c
+@@ -559,9 +559,15 @@ static int handle_seccomp_event_common(Tracee *tracee)
+ 	}
+ 
+ 	case PR_set_robust_list:
+-	default:
+ 		/* Set errno to -ENOSYS */
+ 		set_result_after_seccomp(tracee, -ENOSYS);
++                break;
++
++	default:
++                // not all syscalls are specified to return an error; ex: `alarm` *always* returns the value of the previous alarm, or 0
++                // categorizing all the syscalls into whether they should have a negative return or a SIGSYS or something else would be a lot of work. Fortunately, we're only here *because* the host's seccomp policies already made that decision, and decided it should be SIGSYS. We have no reason to think that was incorrect.
++                return SIGSYS;
++                break;
+ 	}
+ 
+ 	return 0;
