@@ -6,13 +6,18 @@
 , nonAndroidGcc
 , static ? true
 , outputBinaryName ? "proot-static"
+, proot-termux-src ? null
 }:
 
 stdenv.mkDerivation {
   pname = "proot-termux";
   version = "0-unstable-2025-10-19";
 
-  src = fetchFromGitHub {
+  src =
+    if proot-termux-src != null then
+      proot-termux-src
+    else
+  fetchFromGitHub {
     repo = "proot";
     owner = "termux";
     rev = "228a5f28b078f4e2504de46758ce17948f73f507";
@@ -21,7 +26,7 @@ stdenv.mkDerivation {
 
   patches = [
     ./detranslate-empty.patch
-    ./trust-the-sigsys.patch
+    # ./trust-the-sigsys.patch
   ];
 
   # ashmem.h is rather small, our needs are even smaller, so just define these:

@@ -6,6 +6,7 @@
 , nixOnDroidChannelURL ? null
 , nixpkgsChannelURL ? null
 , nixOnDroidFlakeURL ? null
+, proot-termux-src ? null
 }:
 
 let
@@ -14,7 +15,10 @@ let
 
   pkgs = import nixpkgs {
     system = nativeSystem;
-    overlays = [ (new: old: { libuv = old.libuv.overrideAttrs { doCheck = false; }; }) ];
+    overlays = [ (new: old:
+      { libuv = old.libuv.overrideAttrs { doCheck = false; }; }
+      // old.lib.optionalAttrs (proot-termux-src != null) { inherit proot-termux-src; }
+    ) ];
   };
 
   urlOptionValue = url: envVar:

@@ -24,9 +24,14 @@
       url = "sourcehut:~rycee/nmd";
       inputs.nixpkgs.follows = "nixpkgs-docs";
     };
+
+    proot-termux = {
+      url = "github:termux/proot";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-for-bootstrap, home-manager, nix-formatter-pack, nmd, nixpkgs-docs }:
+  outputs = { self, nixpkgs, nixpkgs-for-bootstrap, home-manager, nix-formatter-pack, nmd, nixpkgs-docs, proot-termux }:
     let
       forEachSystem = nixpkgs.lib.genAttrs [ "aarch64-linux" "x86_64-linux" ];
 
@@ -51,6 +56,7 @@
           _nativeSystem = system; # system to cross-compile from
           system = "${arch}-linux"; # system to cross-compile to
           nixpkgs = nixpkgs-for-bootstrap;
+          proot-termux-src = "${proot-termux}";
         });
     in
     {
