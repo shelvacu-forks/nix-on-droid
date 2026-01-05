@@ -41,10 +41,6 @@ stdenv.mkDerivation {
     #define ASHMEM_SET_SIZE _IOW(__ASHMEMIOC, 3, size_t)
     #define ASHMEM_GET_SIZE _IO(__ASHMEMIOC, 4)
     EOF
-    substituteInPlace src/arch.h --replace-fail \
-      '#define HAS_LOADER_32BIT true' \
-      ""
-    ! (grep -F '#define HAS_LOADER_32BIT' src/arch.h)
   '';
   buildInputs = [ talloc ];
   hardeningDisable = [ "zerocallusedregs" ];
