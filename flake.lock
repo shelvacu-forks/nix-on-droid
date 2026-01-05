@@ -132,11 +132,11 @@
     "proot-termux": {
       "flake": false,
       "locked": {
-        "lastModified": 1767518887,
-        "narHash": "sha256-Xgj+vZzHtYNM6EDCTP6Z5rlRFKWVDcmhk8V9WkQ6iMY=",
+        "lastModified": 1767574245,
+        "narHash": "sha256-E9K/tbUFq9tvq0t/iUsjPtqFHIpEYnR9bYLEcL1IUMM=",
         "owner": "shelvacu-forks",
         "repo": "proot",
-        "rev": "712ab6dce79000c7d36665b7bbc643e0aac4d10c",
+        "rev": "a7cdd0986098c84002e37464791dfe2ee94fa95b",
         "type": "github"
       },
       "original": {
