@@ -88,8 +88,12 @@ writeText "login-inner" ''
 
         echo "Setting up Nix-on-Droid with flakes..."
 
-        echo "Installing flake from default template..."
-        ${nixCmd} flake new ${config.user.home}/.config/nix-on-droid --template ${config.build.flake.nix-on-droid}
+        if [[ -f ${config.user.home}/.config/nix-on-droid/flake.nix ]]; then
+          echo "flake.nix already exists, skipping from-template step"
+        else
+          echo "Installing flake from default template..."
+          ${nixCmd} flake new ${config.user.home}/.config/nix-on-droid --template ${config.build.flake.nix-on-droid}
+        fi
 
         ${lib.optionalString config.build.flake.inputOverrides ''
           echo "Overriding input urls in the flake..."

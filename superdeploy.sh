@@ -5,7 +5,9 @@ svl_no_args $#
 
 svl_assert_probably_in_script_dir
 
-adb shell pm clear com.termux.nix
+declare app_id="com.termux.nix"
+
+adb shell pm clear "$app_id"
 rm -rf n-o-d
 mkdir n-o-d
 git -C . archive --format=tar.gz --prefix n-o-d/ HEAD > n-o-d/archive.tar.gz
@@ -16,4 +18,15 @@ adb push n-o-d /data/local/tmp/
 echo 'pushed'
 adb shell 'cd /data/local/tmp/n-o-d && tar xzof archive.tar.gz && mv n-o-d unpacked'
 echo 'unpacked'
+
+# set soft_keyboard_enabled=true in shared preferences
+declare sed_script='/^<\/map>$/ i\    <bool name="soft_keyboard_enabled" value="false" />'
+declare edit_shared_prefs_command
+printf -v edit_shared_prefs_command "su root sed -i -e%q /data/data/$app_id/shared_prefs/${app_id}_preferences.xml" "$sed_script"
+adb shell -- "$edit_shared_prefs_command"
+
+#allow notifications
+adb shell 'pm grant com.termux.nix android.permission.POST_NOTIFICATIONS'
+
+#launch
 adb shell 'am start $(cmd package resolve-activity --brief com.termux.nix | tail -n 1)'
