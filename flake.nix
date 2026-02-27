@@ -129,7 +129,7 @@
               )
               derivationAttrset;
 
-          perArchCustomPkgs = arch: (nodPkgs { inherit system arch; }).customPkgs;
+          perArchCustomPkgs = arch: flattenArch arch (nodPkgs { inherit system arch; }).customPkgs;
 
           docs = import ./docs {
             inherit home-manager;
