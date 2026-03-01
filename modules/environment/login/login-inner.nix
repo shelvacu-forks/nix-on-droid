@@ -122,7 +122,8 @@ writeText "login-inner" ''
                   > "${config.user.home}/.config/nix-on-droid/flake.nix"
 
         echo "Installing first Nix-on-Droid generation..."
-        ${nixCmd} run ${config.build.flake.nix-on-droid} --max-jobs 1 -- switch --flake ${config.user.home}/.config/nix-on-droid --max-jobs 1
+        ${nixCmd} build ${config.user.home}/.config/nix-on-droid#.nixOnDroidConfigurations.default.activationPackage --max-jobs 1 --cores 1 -L -v
+        ${nixCmd} run ${config.build.flake.nix-on-droid} -- switch --flake ${config.user.home}/.config/nix-on-droid
 
         . "${config.user.home}/.nix-profile/etc/profile.d/nix-on-droid-session-init.sh"
 

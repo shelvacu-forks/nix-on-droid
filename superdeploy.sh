@@ -20,7 +20,7 @@ adb shell 'cd /data/local/tmp/n-o-d && tar xzof archive.tar.gz && mv n-o-d unpac
 echo 'unpacked'
 
 # set soft_keyboard_enabled=true in shared preferences
-declare sed_script='/^<\/map>$/ i\    <bool name="soft_keyboard_enabled" value="false" />'
+declare sed_script='/^<\/map>$/ i\    <boolean name="soft_keyboard_enabled" value="false" />'
 declare edit_shared_prefs_command
 printf -v edit_shared_prefs_command "su root sed -i -e%q /data/data/$app_id/shared_prefs/${app_id}_preferences.xml" "$sed_script"
 adb shell -- "$edit_shared_prefs_command"
