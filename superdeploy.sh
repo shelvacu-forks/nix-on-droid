@@ -27,6 +27,7 @@ adb shell -- "$edit_shared_prefs_command"
 
 #allow notifications
 adb shell 'pm grant com.termux.nix android.permission.POST_NOTIFICATIONS'
+adb shell 'pm grant com.termux.nix android.permission.REGISTER_STATS_PULL_ATOM'
 
 #launch
 adb shell 'am start $(cmd package resolve-activity --brief com.termux.nix | tail -n 1)'
